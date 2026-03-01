@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>DayOfTheWeek Test</title>
+	<style>body{font-family:Segoe UI,Arial,sans-serif;padding:20px}#day-output{margin-top:10px;font-weight:600}</style>
+</head>
+<body>
+	<h1>DayOfTheWeek Test</h1>
+	<button id="show-btn">Show Day</button>
+	<div id="day-output" aria-live="polite"></div>
+
+	<script src="../JavaScript/DayOfTheWeek.js"></script>
+	<script>
+		// Call the global DayOfTheWeek() function exposed by DayOfTheWeek.js
+		document.getElementById('show-btn').addEventListener('click', function () {
+			DayOfTheWeek();
+		});
+
+		// Call once on load so the page shows the result immediately
+		window.addEventListener('load', function () {
+			if (typeof DayOfTheWeek === 'function') DayOfTheWeek();
+		});
+	</script>
+</body>
+</html>
+
