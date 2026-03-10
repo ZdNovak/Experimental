@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  # --- THE DATABASE ---
+  sqlserver:
+    image: "mcr.microsoft.com/azure-sql-edge" # Use mssql/server:2022-latest for Intel/AMD
+    container_name: "sql-db"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Password123!" # Must match the emulator below
+    ports:
+      - "1433:1433"
+
+  # --- THE EMULATOR ---
+  servicebus-emulator:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    container_name: "sb-emulator"
+    # This ensures the SQL container starts first
+    depends_on:
+      - sqlserver 
+    # This is CRITICAL: If SQL isn't ready yet, the emulator will restart until it is
+    restart: on-failure 
+    ports:
+      - "5672:5672" # Messaging port
+      - "5300:5300" # Health check port
+    environment:
+      ACCEPT_EULA: "Y"
+      # The emulator requires SQL_SERVER (not SQL_SERVER_INSTANCE) to point at the
+      # database container alias. The service is named "sqlserver" and the container
+      # name is "sql-db"; Docker provides both aliases on the network.
+      SQL_SERVER: "sqlserver"
+      MSSQL_SA_PASSWORD: "Password123!"
+      # Namespace must match your Config.json
+      AZURE_SERVICE_BUS_NAMESPACE: "sbemulatorns" 
+    volumes:
+      - ./Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json

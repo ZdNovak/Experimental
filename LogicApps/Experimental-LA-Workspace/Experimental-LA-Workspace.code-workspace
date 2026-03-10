@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "Experiment_1",
+      "path": "./Experiment_1"
+    }
+  ],
+  "settings": {
+    "terminal.integrated.env.windows": {
+      "PATH": "C:\\Users\\zdnov\\.azurelogicapps\\dependencies\\DotNetSDK;${env:PATH}"
+    },
+    "omnisharp.dotNetCliPaths": [
+      "C:\\Users\\zdnov\\.azurelogicapps\\dependencies\\DotNetSDK"
+    ],
+    "azurite.location": "C:\\Users\\zdnov\\.azurelogicapps\\.azurite"
+  }
+}
