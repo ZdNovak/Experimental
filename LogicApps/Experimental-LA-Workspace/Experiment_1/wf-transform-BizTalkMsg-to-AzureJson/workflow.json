@@ -1,0 +1,144 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "actions": {
+            "Compose_Remove_ns": {
+                "type": "Compose",
+                "inputs": "@replace(string(triggerBody()?['contentData']), 'ns0:', '')",
+                "runAfter": {}
+            },
+            "Compose_remove_ns2": {
+                "type": "Compose",
+                "inputs": "@replace(outputs('Compose_Remove_ns'), ' xmlns:ns0=\"http://www.ups.com/XMLSchema/XOLTWS/Ship/v1.0\" xmlns:ifs=\"http://www.ups.com/XMLSchema/XOLTWS/IF/v1.0\" xmlns:common=\"http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"', ''\r\n)",
+                "runAfter": {
+                    "Compose_Remove_ns": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Compose_remove_ns3": {
+                "type": "Compose",
+                "inputs": "@replace(outputs('Compose_remove_ns2'),'common:','')",
+                "runAfter": {
+                    "Compose_remove_ns2": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Compose_remove_ns4": {
+                "type": "Compose",
+                "inputs": "@replace(outputs('Compose_remove_ns3'), ' xsi:type=\"ShipAddressType\"','')",
+                "runAfter": {
+                    "Compose_remove_ns3": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Compose_remove_ns5": {
+                "type": "Compose",
+                "inputs": "@replace(outputs('Compose_remove_ns4'), '<?xml version=\"1.0\" encoding=\"utf-8\"?>','')",
+                "runAfter": {
+                    "Compose_remove_ns4": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Compose_JSON": {
+                "type": "Compose",
+                "inputs": "@json(xml(replace(outputs('Compose_remove_ns5'),decodeUriComponent('%EF%BB%BF'),'')))",
+                "runAfter": {
+                    "Compose_remove_ns5": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Parse_ServiceBus_CustomsProperty": {
+                "type": "Compose",
+                "inputs": {
+                    "Context": {
+                        "Stage": "OutAzurePOC",
+                        "SourceParty": "#COR_FR",
+                        "SourcePartyID": null,
+                        "DestinationParty": "UPS RETURNS",
+                        "DestinationPartyID": null,
+                        "MessageType": "http://www.ups.com/XMLSchema/XOLTWS/Ship/v1.0#ShipmentRequest",
+                        "MessageId": "@guid()",
+                        "DocumentID": "0060763519",
+                        "URI": "sb://sb-emulator/test-queue"
+                    },
+                    "Body": "@base64(string(outputs('Compose_JSON')))"
+                },
+                "runAfter": {
+                    "Compose_JSON": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Send_message": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "entityName": "sbq-routing",
+                        "message": {
+                            "contentData": "@string(outputs('Parse_ServiceBus_CustomsProperty'))"
+                        }
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "serviceBus",
+                        "operationId": "sendMessage",
+                        "serviceProviderId": "/serviceProviders/serviceBus"
+                    }
+                },
+                "runAfter": {
+                    "Parse_ServiceBus_CustomsProperty": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Complete_the_message_in_a_queue": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "test-queue",
+                        "lockToken": "@triggerBody()?['lockToken']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "serviceBus",
+                        "operationId": "completeQueueMessageV2",
+                        "serviceProviderId": "/serviceProviders/serviceBus"
+                    }
+                },
+                "runAfter": {
+                    "Send_message": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_messages_are_available_in_a_queue_(peek-lock)": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "test-queue"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "serviceBus",
+                        "operationId": "peekLockQueueMessagesV2",
+                        "serviceProviderId": "/serviceProviders/serviceBus"
+                    }
+                },
+                "splitOn": "@triggerOutputs()?['body']"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

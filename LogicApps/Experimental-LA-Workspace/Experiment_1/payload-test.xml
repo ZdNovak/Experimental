@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ns0:ShipmentRequest xmlns:ns0="http://www.ups.com/XMLSchema/XOLTWS/Ship/v1.0"
+  xmlns:ifs="http://www.ups.com/XMLSchema/XOLTWS/IF/v1.0"
+  xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <common:Request>
+    <common:RequestOption>nonvalidate</common:RequestOption>
+    <common:TransactionReference>
+      <common:CustomerContext>0060763519</common:CustomerContext>
+    </common:TransactionReference>
+  </common:Request>
+  <ns0:Shipment>
+    <ns0:Description>Carbide Tools</ns0:Description>
+    <ns0:ReturnService>
+      <ns0:Code>3</ns0:Code>
+    </ns0:ReturnService>
+    <ns0:Shipper>
+      <ns0:Name>Santrade Ltd - EDC.</ns0:Name>
+      <ns0:AttentionName>Santrade Ltd - EDC.</ns0:AttentionName>
+      <ns0:Phone>
+        <ns0:Number>+31102984444</ns0:Number>
+      </ns0:Phone>
+      <ns0:ShipperNumber>2916E7</ns0:ShipperNumber>
+      <ns0:Address xsi:type="ns0:ShipAddressType">
+        <ns0:AddressLine>Heernesse 1</ns0:AddressLine>
+        <ns0:City>Den Hoorn</ns0:City>
+        <ns0:PostalCode>2635DK</ns0:PostalCode>
+        <ns0:CountryCode>NL</ns0:CountryCode>
+      </ns0:Address>
+    </ns0:Shipper>
+    <ns0:ShipTo>
+      <ns0:Name>Santrade Ltd - EDC.</ns0:Name>
+      <ns0:AttentionName>Santrade Ltd - EDC.</ns0:AttentionName>
+      <ns0:Phone>
+        <ns0:Number>+31102984444</ns0:Number>
+      </ns0:Phone>
+      <ns0:Address>
+        <ns0:AddressLine>Heernesse 1</ns0:AddressLine>
+        <ns0:City>Den Hoorn</ns0:City>
+        <ns0:PostalCode>2635DK</ns0:PostalCode>
+        <ns0:CountryCode>NL</ns0:CountryCode>
+      </ns0:Address>
+    </ns0:ShipTo>
+    <ns0:ShipFrom>
+      <ns0:Name>COBALT OUTILS COUPANTS</ns0:Name>
+      <ns0:Address xsi:type="ns0:ShipAddressType">
+        <ns0:AddressLine>143 AVENUE DE VILLARCHER</ns0:AddressLine>
+        <ns0:City>CHAMBERY</ns0:City>
+        <ns0:PostalCode>73000</ns0:PostalCode>
+        <ns0:CountryCode>FR</ns0:CountryCode>
+      </ns0:Address>
+    </ns0:ShipFrom>
+    <ns0:PaymentInformation>
+      <ns0:ShipmentCharge>
+        <ns0:Type>01</ns0:Type>
+        <ns0:BillShipper>
+          <ns0:AccountNumber>2916E7</ns0:AccountNumber>
+        </ns0:BillShipper>
+      </ns0:ShipmentCharge>
+    </ns0:PaymentInformation>
+    <ns0:Service>
+      <ns0:Code>11</ns0:Code>
+    </ns0:Service>
+    <ns0:Package>
+      <ns0:Description>CarbideTools</ns0:Description>
+      <ns0:Packaging>
+        <ns0:Code>02</ns0:Code>
+      </ns0:Packaging>
+      <ns0:PackageWeight>
+        <ns0:UnitOfMeasurement>
+          <ns0:Code>KGS</ns0:Code>
+        </ns0:UnitOfMeasurement>
+        <ns0:Weight>13.082000000000001</ns0:Weight>
+      </ns0:PackageWeight>
+      <ns0:ReferenceNumber>
+        <ns0:BarCodeIndicator></ns0:BarCodeIndicator>
+        <ns0:Code>TN</ns0:Code>
+        <ns0:Value>0060763519</ns0:Value>
+      </ns0:ReferenceNumber>
+    </ns0:Package>
+  </ns0:Shipment>
+</ns0:ShipmentRequest>

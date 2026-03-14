@@ -52,7 +52,7 @@ class Program
     {
         try
         {
-            var logicAppsUrl = "http://localhost:7071/runtime/webhooks/workflow/api/management/workflows/wf-zdenek-test/triggers/manual/run";
+            var logicAppsUrl = "http://localhost:7071/runtime/webhooks/workflow/api/management/workflows/wf-transform-BizTalkMsg-to-AzureJson/triggers/manual/run";
             var payload = new { message = message };
             var json = JsonSerializer.Serialize(payload);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

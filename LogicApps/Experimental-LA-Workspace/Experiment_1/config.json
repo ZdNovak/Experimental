@@ -4,7 +4,8 @@
       {
         "Name": "sbemulatorns",
         "Queues": [
-          { "Name": "test-queue" }
+          { "Name": "test-queue" },
+          { "Name": "sbq-routing" }
         ],
         "Topics": [
           {
